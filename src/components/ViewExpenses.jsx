@@ -1,31 +1,15 @@
-import { Box, Button, Modal } from "@mui/material";
 import React, { useContext } from "react";
+import { Box, Button, Modal } from "@mui/material";
 import { BudgetsContext } from "../context/BudgetsContext";
+import { v4 as uuid } from "uuid";
+
 
 const ViewExpenses = ({ viewExpenses, setViewExpenses }) => {
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 600,
-    bgcolor: "rgb(255 247 247 / 96%)",
-    // border: "2px solid #000",
-    borderRadius:"10px",
-    boxShadow: 24,
-    p: 4,
-  };
-
-  const { expenses, budgetId,deleteExpense } = useContext(BudgetsContext);
+  const { expenses, budgetId, deleteExpense } = useContext(BudgetsContext);
   const filteredExpenses = expenses.filter(
     (expense) => expense.budgetId == budgetId && expense
   );
-  console.log(filteredExpenses);
-  // const handleOpen = () => setOpen(true);
   const handleClose = () => setViewExpenses(false);
-  const handleDeleteExpense=()=>{
-
-  }
   return (
     <Modal
       open={viewExpenses}
@@ -33,10 +17,10 @@ const ViewExpenses = ({ viewExpenses, setViewExpenses }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
+      <Box>
         {filteredExpenses?.map((item) => {
           return (
-            <div className="view-expenses">
+            <div className="view-expenses" key={uuid()}>
               <div>
                 <h4>
                   Expense Title: <span>{item.title}</span>
@@ -45,7 +29,11 @@ const ViewExpenses = ({ viewExpenses, setViewExpenses }) => {
                   Amount: <span>${item.amount}</span>
                 </h4>
               </div>
-              <Button onClick={()=>deleteExpense(item.expenseId)} variant="outlined" color="error">
+              <Button
+                onClick={() => deleteExpense(item.expenseId)}
+                variant="outlined"
+                color="error"
+              >
                 Delete
               </Button>
             </div>

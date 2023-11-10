@@ -1,14 +1,10 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 import useLocalStorage from "../service/useLocalStorage";
 import { v4 as uuid } from "uuid";
 
 export const BudgetsContext = createContext();
 
 const BudgetsProvider = ({ children }) => {
-  // useEffect(() => {
-  //   localStorage.setItem("Budgets",JSON.stringify([]))
-  //   localStorage.setItem("Expenses",JSON.stringify([]))
-  // }, [])
 
   const [budgets, setBudgets] = useLocalStorage("budgets", []);
   const [expenses, setExpenses] = useLocalStorage("expenses", []);
@@ -30,7 +26,7 @@ const BudgetsProvider = ({ children }) => {
   const addExpense = ({ title, amount, budgetId }) => {
     setExpenses((prevExpenses) => [
       ...prevExpenses,
-      { expenseId: uuid(), title, amount, budgetId },
+      { expenseId: uuid(), title, amount:+amount, budgetId },
     ]);
   };
 

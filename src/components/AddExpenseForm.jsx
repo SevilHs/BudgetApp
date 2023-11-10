@@ -2,25 +2,29 @@ import { Button } from "@mui/material";
 import React, { useContext, useRef, useState } from "react";
 import { BudgetsContext } from "../context/BudgetsContext";
 
-const AddExpenseForm = () => {
+const AddExpenseForm = ({ setOpen }) => {
   const [expenseValues, setExpenseValues] = useState({});
   const { budgetId, budgets, addExpense, setBudgetId } =
     useContext(BudgetsContext);
   const selecetBudgetRef = useRef();
   const budget = budgets.find((budget) => budget.budgetId == budgetId);
 
-  const handleAddExpense = () => {
+  const handleAddExpense = (e) => {
+    e.preventDefault();
     setBudgetId(selecetBudgetRef.current.value);
     addExpense(expenseValues);
+    setOpen(false);
   };
   return (
-    <>
-      <h3>New Expense</h3>
-      <form>
-        <label htmlFor="">Description Expense</label>
+    <div className="form-div">
+      <h2>New Expense📌</h2>
+      <form onSubmit={handleAddExpense}>
+        <label htmlFor="description">Description Expense</label>
         <br />
         <input
           type="text"
+          id="description"
+          required
           onChange={(e) =>
             setExpenseValues({
               ...expenseValues,
@@ -29,12 +33,12 @@ const AddExpenseForm = () => {
           }
         />{" "}
         <br />
-        <label htmlFor="">Amount</label>
+        <label htmlFor="amount">Amount</label>
         <br />
         <input
           type="number"
-          name=""
-          id=""
+          id="amount"
+          required
           onChange={(e) =>
             setExpenseValues({
               ...expenseValues,
@@ -43,11 +47,10 @@ const AddExpenseForm = () => {
           }
         />{" "}
         <br />
-        <label htmlFor="">Budget Name</label>
+        <label>Budget Name</label>
         <br />
         <select
-          name=""
-          id=""
+          required
           ref={selecetBudgetRef}
           onChange={(e) =>
             setExpenseValues({
@@ -61,17 +64,19 @@ const AddExpenseForm = () => {
           ) : (
             budgets?.map((budget) => {
               return (
-                <option value={budget.budgetId}>{budget.budgetName}</option>
+                <option key={budget.budgetId} value={budget.budgetId}>
+                  {budget.budgetName}
+                </option>
               );
             })
           )}
         </select>{" "}
         <br />
-        <Button variant="contained" onClick={() => handleAddExpense()}>
+        <Button type="submit" variant="contained">
           Add Expense
         </Button>
       </form>
-    </>
+    </div>
   );
 };
 
